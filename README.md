@@ -77,7 +77,6 @@ skin-lesion-classification/
 ## Academic Context
 **Course**: DTSC301 - Deep Learning Through Neural Networks  
 **Institution**: Bond University  
-**Assessment**: Assignment 2 (40% weighting of Final Grade)  
 **Focus**: Real-world application of CNNs in medical imaging
 
 ## Ethical Considerations
