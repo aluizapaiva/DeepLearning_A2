@@ -86,7 +86,7 @@ skin-lesion-classification/
 - Patient privacy and data security maintained throughout
 
 ## Contact
-Ana Luiza Lerch Paiva  
+Ana Paiva  
 Data Analyst Student, Bond University  
 GitHub: @aluizapaiva
 
