@@ -1,94 +1,53 @@
-# DeepLearning_A2
-Personal Projects with Deep Learning
-
-# Skin Lesion Classification: CNN-Based Diagnostic Support System
+# Skin Lesion Classification: CNN-Based Diagnostic Support Prototype
 
 ## Project Overview
-This project develops a machine learning model to assist dermatologists in classifying skin lesions as either benign or malignant using dermoscopic images. The solution aims to serve as a diagnostic support tool to accelerate dermatological assessments and improve early cancer detection.
+Deep learning models that classify dermoscopic images as benign or malignant, built as a research prototype for a hospital dermatology department scenario. The main goal is high recall (sensitivity), because a missed malignant lesion is the costly error.
 
-## Business Context
-**Problem**: Manual screening of skin lesions is time-intensive and can result in missed early-stage cancers (15% miss rate in routine triage).
+This is a student prototype. It has not been validated clinically and is not a medical device.
 
-**Solution**: An automated image classification system that provides instant risk assessment and biopsy recommendations, helping clinicians prioritize high-risk cases.
+## Dataset
+- **Source**: ISIC (International Skin Imaging Collaboration) dermoscopic images with metadata
+- **Size**: 7,818 images, 85.8% benign and 14.2% malignant (about 6:1)
+- **Split**: stratified 70/15/15 by image into train, validation and test sets
 
-## Technical Approach
+## Models Compared
+A naive baseline, a small CNN, and four ImageNet transfer learning models (VGG16, ResNet50, InceptionV3, MobileNetV2), each trained with two class-weight strategies: weights that penalise missed malignant cases (original) and equal weights (balanced).
 
-### Model Architecture
-- **Primary Model**: Convolutional Neural Network (CNN) using VGG16 architecture
-- **Task Type**: Binary classification (benign vs. malignant)
-- **Input**: Dermoscopic images from ISIC dataset
-- **Output**: Malignancy probability score (0-100%)
+## Key Results (test set, 1,173 images, threshold 0.5)
+| Model | Weights | Recall | Precision | AUC |
+|---|---|---|---|---|
+| VGG16 | original | 93.4% | 31.8% | 0.90 |
+| InceptionV3 | original | 88.6% | 31.0% | 0.89 |
+| MobileNetV2 | original | 80.8% | 37.0% | 0.89 |
+| MobileNetV2 | balanced | 61.1% | 60.4% | 0.90 |
+| InceptionV3 | balanced | 59.3% | 61.5% | 0.89 |
+| ResNet50 | both | 1% to 26% | 54% to 67% | 0.84 |
 
-### Dataset
-- **Source**: ISIC (International Skin Imaging Collaboration) dataset
-- **Size**: 7,818 dermoscopic images
-- **Classes**: Benign and malignant skin lesions
-- **Format**: High-resolution dermoscopic images with corresponding metadata
+The class weights mainly move the model along the recall and precision trade-off. They do not change the AUC, which stays close to 0.9 for three of the four architectures.
 
-### Performance Results
-- **Cancer Detection Rate**: 93.4%
-- **Processing Time**: <5 seconds per image
-- **Clinical Impact**: 60x faster than manual review
-- **Capacity Increase**: Enables 67% more cases annually
+## Limitations
+- The images are split by image, not by lesion or patient, so near-duplicate images may sit in both train and test and inflate the results
+- The generator found 4,228 training images in the organised folder, not the 5,472 that a 70% split implies, so the models were trained on less data than the notebook states
+- Models were compared on the test set, and the reported figures are for the model after the last epoch, not the best checkpoint
+- Images are only rescaled to 0 to 1, while the ImageNet models expect their own preprocessing. This is a more likely cause of the poor ResNet50 result than the architecture itself
+- No external validation, and the metadata is not used
+- The management report makes business claims (speed, capacity, biopsy reduction, regulatory compliance) that come from the scenario and are not supported by this analysis
 
-## Repository Structure
-```
-skin-lesion-classification/
-├── skin_lesion_analysis.ipynb    # Main technical notebook
-├── management_report.pdf         # Executive summary for clinical staff
-├── data/                        # Dataset files 
-│   ├── ISIC_Metadata.csv
-│   └── images/                  # Dermoscopic images
-├── models/                      # Saved model files
-├── results/                     # Output visualizations and metrics
-└── README.md                    # This file
-```
+## Files
+- `skin_lesion_classification.ipynb`: technical notebook with code, outputs and analysis
+- `ISIC_ManagementReport.pdf`: executive summary for the hospital scenario
 
-## Key Features
-- **Multiple Model Comparison**: Testing various CNN architectures
-- **Data Preprocessing**: Image normalization and augmentation
-- **Performance Evaluation**: Comprehensive metrics for medical applications
-- **Clinical Visualization**: Charts and graphs suitable for medical professionals
-- **Risk Assessment**: Probability scores for clinical decision support
-
-## Clinical Applications
-- **Diagnostic Support**: Assists dermatologists in lesion assessment
-- **Triage Enhancement**: Prioritizes high-risk cases for immediate review
-- **Workflow Integration**: Seamlessly fits into existing clinical processes
-- **Quality Assurance**: Reduces diagnostic variability and improves consistency
+The images and metadata are not included. To rerun the notebook, open it in Google Colab and set the data paths to your own copy of the ISIC data. Libraries: tensorflow, opencv, pandas, numpy, matplotlib, seaborn, scikit-learn.
 
 ## Technologies Used
-- **Python**: Primary programming language
-- **TensorFlow/Keras**: Deep learning framework
-- **CNN Architecture**: VGG16 for image classification
-- **Google Colab**: Development and training environment
-- **Jupyter Notebooks**: Documentation and analysis
-
-## Installation & Usage
-1. Clone this repository
-2. Install required dependencies: `pip install tensorflow pandas numpy matplotlib seaborn scikit-learn`
-3. Open `skin_lesion_analysis.ipynb` in Jupyter or Google Colab
-4. Follow the notebook cells sequentially for model training and evaluation
-
-## Reports Included
-- **Management Report**: Non-technical executive summary for hospital administration
-- **Technical Report**: Detailed Jupyter notebook with complete methodology and results
+Python, TensorFlow and Keras, Google Colab
 
 ## Academic Context
 **Course**: DTSC301 - Deep Learning Through Neural Networks  
 **Institution**: Bond University  
 **Focus**: Real-world application of CNNs in medical imaging
 
-## Ethical Considerations
-- Model serves as diagnostic support only - final decisions remain with physicians
-- Continuous monitoring ensures performance standards
-- Compliant with medical device regulations
-- Patient privacy and data security maintained throughout
-
 ## Contact
 Ana Paiva  
 Data Analyst Student, Bond University  
 GitHub: @aluizapaiva
-
----
-*This project demonstrates practical application of deep learning techniques to healthcare challenges, combining technical rigor with clinical relevance.*
