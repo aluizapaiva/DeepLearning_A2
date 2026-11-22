@@ -31,7 +31,7 @@ The class weights mainly move the model along the recall and precision trade-off
 - Models were compared on the test set, and the reported figures are for the model after the last epoch, not the best checkpoint
 - Images are only rescaled to 0 to 1, while the ImageNet models expect their own preprocessing. This is a more likely cause of the poor ResNet50 result than the architecture itself
 - No external validation, and the metadata is not used
-- The management report makes business claims (speed, capacity, biopsy reduction, regulatory compliance) that come from the scenario and are not supported by this analysis
+- The management report is written for a hospital scenario. Its capacity, speed and onboarding figures are scenario assumptions, not results of this analysis, and are labelled as such
 
 ## Files
 - `skin_lesion_classification.ipynb`: technical notebook with code, outputs and analysis
